@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "cadlab"
+  site-url: "https://ozpau.github.io/cadlab"
+  description: "CAD tools for Jupyter notebooks"
+  repo-branch: main
+  repo-url: "https://github.com/ozpau/cadlab"
