@@ -4,8 +4,9 @@ on:  [workflow_dispatch, pull_request, push]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DISPLAY: :5
     steps:
       - run: sudo apt-get install -y xvfb openscad
       - run: Xvfb :5 -screen 0 800x600x24 &
-      - run: export DISPLAY=:5
       - uses: fastai/workflows/nbdev-ci@master
