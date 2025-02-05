@@ -13,4 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y xvfb openscad
+      - run: Xvfb :5 -screen 0 800x600x24 &
+      - run: export DISPLAY=:5
       - uses: fastai/workflows/quarto-ghp@master
