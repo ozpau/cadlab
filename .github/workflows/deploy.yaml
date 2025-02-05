@@ -12,5 +12,5 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get install -y openscad
+      - run: sudo apt-get install -y xvfb openscad
       - uses: fastai/workflows/quarto-ghp@master
