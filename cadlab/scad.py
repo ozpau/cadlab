@@ -32,7 +32,8 @@ def export_to(model, export_format, w=300, h=150, colorscheme=None):
     result = subprocess.run(
         ['openscad', '--colorscheme', colorscheme, '--imgsize', f'{w},{h}', '--export-format', export_format, '-o', '-', '-'],
         input=bytes(str(model), 'utf-8'),
-        capture_output=True
+        capture_output=True,
+        check=True
     )
     return result.stdout
 
