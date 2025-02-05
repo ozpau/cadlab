@@ -1,0 +1,92 @@
+[
+  {
+    "objectID": "fill_grid.html",
+    "href": "fill_grid.html",
+    "title": "fill_grid",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "fill_grid"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "cadlab",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "cadlab",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall cadlab in Development mode\n# make sure cadlab package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to cadlab\n$ nbdev_prepare",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "cadlab",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/ozpau/cadlab.git\nor from conda\n$ conda install -c ozpau cadlab\nor from pypi\n$ pip install cadlab\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "cadlab",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "scad.html",
+    "href": "scad.html",
+    "title": "scad",
+    "section": "",
+    "text": "source",
+    "crumbs": [
+      "scad"
+    ]
+  },
+  {
+    "objectID": "scad.html#colorschemes",
+    "href": "scad.html#colorschemes",
+    "title": "scad",
+    "section": "Colorschemes",
+    "text": "Colorschemes\nYou can configure the colorscheme you like by setting scad.colorscheme to appropritate string:\n\nfig, axs = plt.subplots(2,5, figsize=(12,5)) # 2,5\naxs = axs.flatten()\n\nfor ax, cs in zip(axs, colorschemes):\n    ax.imshow(to_img(d, 100, 100, cs))\n    ax.axis(\"off\")\n    ax.set_title(cs)",
+    "crumbs": [
+      "scad"
+    ]
+  },
+  {
+    "objectID": "scad.html#exporting-to-stl",
+    "href": "scad.html#exporting-to-stl",
+    "title": "scad",
+    "section": "Exporting to STL",
+    "text": "Exporting to STL\n\nimport solid2\n\n\nd.save_as_stl??\n\n\nSignature: d.save_as_stl(filename=None)\nDocstring: &lt;no docstring&gt;\nSource:   \n    def save_as_stl(self, filename=None):\n        from ..scad_render import render_to_stl_file\n        return render_to_stl_file(self, filename)\nFile:      ~/nbdev/contrib/SolidPython/solid2/core/object_base/object_base_impl.py\nType:      method\n\n\n\n\nsource\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "scad"
+    ]
+  }
+]
