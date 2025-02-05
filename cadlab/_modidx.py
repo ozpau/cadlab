@@ -5,4 +5,9 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://ozpau.github.io',
                 'git_url': 'https://github.com/ozpau/cadlab',
                 'lib_path': 'cadlab'},
-  'syms': {'cadlab.core': {'cadlab.core.foo': ('core.html#foo', 'cadlab/core.py')}}}
+  'syms': { 'cadlab.core': {'cadlab.core.foo': ('core.html#foo', 'cadlab/core.py')},
+            'cadlab.fdm_gcode': {},
+            'cadlab.fill_grid': {'cadlab.fill_grid.foo': ('fill_grid.html#foo', 'cadlab/fill_grid.py')},
+            'cadlab.scad': { 'cadlab.scad.export_to': ('scad.html#export_to', 'cadlab/scad.py'),
+                             'cadlab.scad.foo': ('scad.html#foo', 'cadlab/scad.py'),
+                             'cadlab.scad.to_img': ('scad.html#to_img', 'cadlab/scad.py')}}}
