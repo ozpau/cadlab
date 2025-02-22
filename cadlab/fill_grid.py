@@ -5,9 +5,5 @@
 # %% auto 0
 __all__ = ['foo']
 
-# %% ../nbs/02_fill_grid.ipynb 3
-import openstl
-import numpy as np
-
 # %% ../nbs/02_fill_grid.ipynb 5
 def foo(): pass
