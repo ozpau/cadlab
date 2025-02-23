@@ -1,0 +1,108 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "cadlab",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "cadlab",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall cadlab in Development mode\n# make sure cadlab package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to cadlab\n$ nbdev_prepare",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "cadlab",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/ozpau/cadlab.git\nor from conda\n$ conda install -c ozpau cadlab\nor from pypi\n$ pip install cadlab\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "cadlab",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "api/core.html",
+    "href": "api/core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "api",
+      "core"
+    ]
+  },
+  {
+    "objectID": "api/scad.html",
+    "href": "api/scad.html",
+    "title": "scad",
+    "section": "",
+    "text": "source",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/scad.html#colorschemes",
+    "href": "api/scad.html#colorschemes",
+    "title": "scad",
+    "section": "Colorschemes",
+    "text": "Colorschemes\nYou can configure the colorscheme you like by setting scad.colorscheme to appropritate string:\n\nfig, axs = plt.subplots(5,2, figsize=(12,24)) # 2,5\naxs = axs.flatten()\n\nfor ax, cs in zip(axs, colorschemes):\n    ax.imshow(to_img(d, 300, 300, cs))\n    ax.axis(\"off\")\n    ax.set_title(cs)",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/scad.html#exporting-to-stl",
+    "href": "api/scad.html#exporting-to-stl",
+    "title": "scad",
+    "section": "Exporting to STL",
+    "text": "Exporting to STL\n\nsource\n\nexport_to_stl\n\n export_to_stl (model)\n\n\nstl = export_to_stl(d)\n\n\nvolume, cog, inertia = stl.get_mass_properties()\nprint(\"Volume                                  = {0}\".format(volume))\nprint(\"Position of the center of gravity (COG) = {0}\".format(cog))\nprint(\"Inertia matrix at expressed at the COG  = {0}\".format(inertia[0,:]))\nprint(\"                                          {0}\".format(inertia[1,:]))\nprint(\"                                          {0}\".format(inertia[2,:]))\nprint(\"Your mesh is closed: {0}\".format(stl.is_closed(exact=True)))\n\nVolume                                  = 2553.8624674479165\nPosition of the center of gravity (COG) = [-1.59327703e-07  2.98739444e-09  2.50000080e+00]\nInertia matrix at expressed at the COG  = [7.68085765e+04 9.11458332e-04 1.54622072e-04]\n                                          [9.11458332e-04 1.57231110e+05 3.60870367e-04]\n                                          [1.54622072e-04 3.60870367e-04 2.23398600e+05]\nYour mesh is closed: True\n\n\n\nfigure = pyplot.figure()\naxes = figure.add_subplot(projection='3d')\n\naxes.add_collection3d(mplot3d.art3d.Poly3DCollection(stl.vectors))\n\nscale = stl.points.flatten()\naxes.auto_scale_xyz(scale, scale, scale)\n\npyplot.show()",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/fill_grid.html",
+    "href": "api/fill_grid.html",
+    "title": "fill_grid",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "api",
+      "fill_grid"
+    ]
+  },
+  {
+    "objectID": "examples/gear.html",
+    "href": "examples/gear.html",
+    "title": "Gear",
+    "section": "",
+    "text": "from cadlab.scad import *\nfrom solid2 import *\nfrom math import pi, cos, sin\n\n\nset_global_fn(100)\n\nA gear is a mechanical device that can be used to transmit rotational motion. It has a flat disk shape, with teeth on the edges and a hole in the center.\nThe hole is there to place the gear on an axle on which it can freely rotate and the teeth are there to transmit rotational motion to other gears or other mechanical components that also have teeth that are spaced the same way.\nNote that the center does not need to be circular. For example, if you wish to attach a leaver, you can use a square hole in order to transmit angular momentum from the leaver to the gear.\nOther things are possible too. For example, you might be able to connect the gear directly to a spiraling spring in order to act as an energy storage device.\nWe start by creating the base.\n\ngear_height = 5\nradius_to_teeth = 8\n\nbase_shape = cylinder(h = gear_height, r = radius_to_teeth)\nbase_shape\n\n\n\n\n\n\n\n\nNext, we need teeth. Teeth would be placed repeatedly, with spaces between them equal to the teeth width. So, once we are set to the number of teeth we want, we can compute teeth width from\n\\[\n\\text{teeth_width} \\cdot 2 \\cdot \\text{n_teeth} = 2 \\cdot \\pi \\cdot \\text{radius_to_teeth}\n\\]\n\nn_teeth = 10\n\nteeth_width = pi * radius_to_teeth / n_teeth\nteeth_width\n\n2.5132741228718345\n\n\n\nwith_teeth = base_shape\nfor i in range(n_teeth):\n    with_teeth += cylinder(h = gear_height, r = teeth_width/2).translate([radius_to_teeth,0,0]).rotate([0,0,360/n_teeth*i])\nwith_teeth\n\n\n\n\n\n\n\n\nWe have teeth! But they look a bit too short. To create a longer tooth, lets take a hull of two cylinders.\n\nteeth_offset = 0.25 * teeth_width\n\ntooth_end = cylinder(h = gear_height, r = teeth_width/2)\ntooth = tooth_end + tooth_end.translate([teeth_offset,0,0])\ntooth\n\n\n\n\n\n\n\n\n\ntooth = tooth.hull()\ntooth\n\n\n\n\n\n\n\n\nWe can even simplify this further since we don’t need inner side to be circular:\n\ntooth_end = cylinder(h = gear_height, r = teeth_width/2)\ntooth = (cube([teeth_width/2, teeth_width, gear_height], center=True).translate([0,0,gear_height/2])\n         + cylinder(h = gear_height, r = teeth_width/2).translate([teeth_offset,0,0]))\ntooth\n\n\n\n\n\n\n\n\nNow this geometry is simpler, so it will be faster to work with. Note that we don’t even need hull anymore.\nLets try putting this tooth into the gear:\n\nwith_teeth = base_shape\nfor i in range(n_teeth):\n    with_teeth += tooth.translate([radius_to_teeth,0,0]).rotate([0,0,360/n_teeth*i])\nwith_teeth\n\n\n\n\n\n\n\n\nLets cut out a hole for an axle:\n\naxle_radius = 2.5\n\naxle_hole = cylinder(h=gear_height*4, r=axle_radius, center=True)\ngear = with_teeth - axle_hole\ngear",
+    "crumbs": [
+      "examples",
+      "Gear"
+    ]
+  }
+]
