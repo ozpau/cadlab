@@ -30,11 +30,17 @@ colorschemes = [
 ]
 
 # %% ../nbs/api/01_scad.ipynb 5
-def export_to(model, export_format, w=300, h=150, colorscheme=None):
+def export_to(model, export_format, w=600, h=300, colorscheme=None):
     colorscheme = colorscheme or globals()['colorscheme']
     
     result = subprocess.run(
-        ['openscad', '--colorscheme', colorscheme, '--imgsize', f'{w},{h}', '--export-format', export_format, '-o', '-', '-'],
+        ['openscad', '--colorscheme', colorscheme, '--imgsize', f'{w},{h}',
+         '--export-format', export_format,
+        # '--preview', 'throwntogether',
+         '--view', 'axes,crosshairs,scales',
+         #'--view', 'scales',
+         '--projection', 'ortho',
+         '-o', '-', '-'],
         input=bytes(str(model), 'utf-8'),
         capture_output=True,
         check=True
@@ -42,12 +48,14 @@ def export_to(model, export_format, w=300, h=150, colorscheme=None):
     return result.stdout
 
 # %% ../nbs/api/01_scad.ipynb 6
-def to_img(model, w=300, h=150, colorscheme=None):
+def to_img(model, w=600, h=300, colorscheme=None):
     "Convert model to image"
 
-    data = export_to(model, "png", w=w, h=h, colorscheme=colorscheme)
+    # If we render at slightly higher resolution, the result looks smoother
+    s = 1.75
+    data = export_to(model, "png", w=int(s*w), h=int(s*h), colorscheme=colorscheme)
 
-    return Image.open(io.BytesIO(data))
+    return Image.open(io.BytesIO(data)).resize((w,h), resample=Image.LANCZOS)
 
 # %% ../nbs/api/01_scad.ipynb 8
 @patch
