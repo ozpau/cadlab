@@ -1,0 +1,130 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "cadlab",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "cadlab",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall cadlab in Development mode\n# make sure cadlab package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to cadlab\n$ nbdev_prepare",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "cadlab",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/ozpau/cadlab.git\nor from conda\n$ conda install -c ozpau cadlab\nor from pypi\n$ pip install cadlab\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "cadlab",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "cadlab"
+    ]
+  },
+  {
+    "objectID": "examples/stick_barrette.html",
+    "href": "examples/stick_barrette.html",
+    "title": "Stick Barrette",
+    "section": "",
+    "text": "Main (top/outer) part\nStick (bottom/inner) part\nLets design this part. As opposed to other hair clips, there is no need for complex spring mechanism, and the whole thing can be 3d printed without any supports.\nset_global_fn(100)\nLength of the outer part.\nouter_length = 120\nNow we need the radius of circumference. This is the part of the human skull we are interested in. The radius of circumference varies from person to person, but is about 9 cm according to Llama 3.3 70B, and that sounds about right, so I am gonna trust it for now.\nouter_radius = 90\nNote that we could make an arc by subtracting a section from a circle, but this won’t work for angles larger than 180 degrees. So let’s just use a polygon.\nsource",
+    "crumbs": [
+      "examples",
+      "Stick Barrette"
+    ]
+  },
+  {
+    "objectID": "examples/stick_barrette.html#adding-repeating-pattern",
+    "href": "examples/stick_barrette.html#adding-repeating-pattern",
+    "title": "Stick Barrette",
+    "section": "Adding repeating pattern",
+    "text": "Adding repeating pattern\nNow we are back to the same problem we had when we needed to place teeth in the gear example.\nWe have a polygonal section of known radius and of known segment length and we want to relate that to angles.\nAside: turns out this problem has a nice application to wave diffraction.\n\nn = 4+1\nr = 2\nrs = r*np.ones(n)\ntheta = np.linspace(-np.deg2rad(45),np.deg2rad(45),n)\n\nfig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(5,5))\nax.plot(theta, rs)\nax.set_rmax(r*1.2)\n#ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks\n#ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line\nax.grid(True)\n\n\n\n\n\n\n\n\nHere we have a circle of radius 2 and a polyhedral segment where distance from origin to every vertex is equal to 2 and angle between each pair of consequent vertices is equal to 90/4 = 22.5 degrees.\nIn our other problem, on the other hand, we know segment length (it’s diagonal of the cube plus any margin we need), and we know the radius (it’s outer_radius), and we want to know how much angular spacing is between each consequent pair of vertices.\nWe have an equilateral triangle of known side and base and we want to find the height. If we split base into two, we would end up with the right triangle.\nHence, the sine of the half angle is equal to the half base divided by the side.\nThus:\n\nsource\n\nsegment_angle\n\n segment_angle (base, side, deg=True)\n\n\ntest_eq(segment_angle(0,10), 0)\n\n\\[\\text{hole\\_diam}^2 + \\text{hole\\_diam}^2 = \\text{hole\\_size}^2\\]\n\nhole_diam = hole_size/np.sqrt(2)\nhole_diam\n\nnp.float64(7.071067811865475)\n\n\n\nmargin = 10\n\n\nhole_side = hole_diam + margin\n\n\nsa = segment_angle(hole_side, outer_radius)\nsa\n\nnp.float64(10.884137282582449)\n\n\nWell, let’s test it out\n\nouter_with_holes = (outer_part\n                    -hole_cutter.rotate([0,0,-(outer_angle/2-hole_inset_angle)])\n                    -hole_cutter.rotate([0,0,-(outer_angle/2-hole_inset_angle-sa)])\n                    -hole_cutter.rotate([0,0,(outer_angle/2-hole_inset_angle)]))\n\nview(outer_with_holes, eye=(outer_radius*2,0,outer_height), viewall=False)\n\n\n\n\n\n\n\n\nLooks good.\nNow, how many holes can we fit in total?\n\nouter_angle / sa\n\nnp.float64(7.018872575813733)\n\n\n\nouter_with_holes = outer_part\n\nfor i in range(7):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa/2)])\n\nview(outer_with_holes, eye=(outer_radius*2,0,outer_height), viewall=False)\n\n\n\n\n\n\n\n\nLooks nice! Let’s add more rows.\n\nouter_with_holes = outer_part\n\nfor i in range(7):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa/2)])\n\nfor i in range(6):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa)]).translate([0,0,hole_side/2])\n\nfor i in range(6):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa)]).translate([0,0,-hole_side/2])\n\nouter_with_holes_v1 = outer_with_holes\n\nview(outer_with_holes, eye=(outer_radius*2,0,outer_height), viewall=False)\n\n\n\n\n\n\n\n\n\nouter_with_holes = outer_part\n\nfor i in range(7):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa/2)])\n\nfor i in range(9):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa + sa)]).translate([0,0,hole_side/2])\n\nfor i in range(9):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa + sa)]).translate([0,0,-hole_side/2])\n\nfor i in range(7):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa/2)]).translate([0,0,hole_side])\n\nfor i in range(7):\n    outer_with_holes -= hole_cutter.rotate([0,0,-(outer_angle/2-i*sa - sa/2)]).translate([0,0,-hole_side])\n\nview(outer_with_holes, eye=(outer_radius*2,0,outer_height), viewall=False)\n\n\n\n\n\n\n\n\nI think I like the one with only three rows more:\n\nouter_with_holes = outer_with_holes_v1\n\nview(outer_with_holes, eye=(outer_radius*2,0,outer_height), viewall=False)\n\n\n\n\n\n\n\n\n\nview(outer_with_holes, eye=(-outer_radius,0,2*outer_height),center=(outer_radius,0,0), viewall=False)\n\n\n\n\n\n\n\n\nOk, let’s 3d print this to check out how it look in real life.\n\nstl = export_to_stl(outer_with_holes)\n\n\nstl.save('barrette.stl')",
+    "crumbs": [
+      "examples",
+      "Stick Barrette"
+    ]
+  },
+  {
+    "objectID": "api/scad.html",
+    "href": "api/scad.html",
+    "title": "scad",
+    "section": "",
+    "text": "–camera arg camera parameters when exporting png: =translate_x,y,z,rot_x,y,z,dist or =eye_x,y,z,center_x,y,z\na = (10,20,30)\n','.join(map(str,a))\n\n'10,20,30'\na = []\nif a:\n    print(\"yes\")",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/scad.html#colorschemes",
+    "href": "api/scad.html#colorschemes",
+    "title": "scad",
+    "section": "Colorschemes",
+    "text": "Colorschemes\nYou can configure the colorscheme you like by setting scad.colorscheme to appropritate string:\n\nfig, axs = plt.subplots(5,2, figsize=(12,24)) # 2,5\naxs = axs.flatten()\n\nfor ax, cs in zip(axs, colorschemes):\n    ax.imshow(view(d, 300, 300, cs))\n    ax.axis(\"off\")\n    ax.set_title(cs)",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/scad.html#exporting-to-stl",
+    "href": "api/scad.html#exporting-to-stl",
+    "title": "scad",
+    "section": "Exporting to STL",
+    "text": "Exporting to STL\n\n\nexport_to_stl\n\n export_to_stl (model)\n\n\nstl = export_to_stl(d)\n\n\nvolume, cog, inertia = stl.get_mass_properties()\nprint(\"Volume                                  = {0}\".format(volume))\nprint(\"Position of the center of gravity (COG) = {0}\".format(cog))\nprint(\"Inertia matrix at expressed at the COG  = {0}\".format(inertia[0,:]))\nprint(\"                                          {0}\".format(inertia[1,:]))\nprint(\"                                          {0}\".format(inertia[2,:]))\nprint(\"Your mesh is closed: {0}\".format(stl.is_closed(exact=True)))\n\nVolume                                  = 3233.8717447916665\nPosition of the center of gravity (COG) = [-0.39244195  0.01129184 -1.48824022]\nInertia matrix at expressed at the COG  = [ 1.26691235e+05  9.59202307e+01 -1.40417640e+04]\n                                          [ 9.59202307e+01  2.56363254e+05 -5.24176883e+02]\n                                          [-14041.76401878   -524.17688261 279222.64519674]\nYour mesh is closed: True\n\n\n\nfigure = pyplot.figure()\naxes = figure.add_subplot(projection='3d')\n\naxes.add_collection3d(mplot3d.art3d.Poly3DCollection(stl.vectors))\n\nscale = stl.points.flatten()\naxes.auto_scale_xyz(scale, scale, scale)\n\npyplot.show()",
+    "crumbs": [
+      "api",
+      "scad"
+    ]
+  },
+  {
+    "objectID": "api/core.html",
+    "href": "api/core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "api",
+      "core"
+    ]
+  },
+  {
+    "objectID": "api/fill_grid.html",
+    "href": "api/fill_grid.html",
+    "title": "fill_grid",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "api",
+      "fill_grid"
+    ]
+  },
+  {
+    "objectID": "examples/gear.html",
+    "href": "examples/gear.html",
+    "title": "Gear",
+    "section": "",
+    "text": "from cadlab.scad import *\nfrom solid2 import *\nfrom math import pi, cos, sin\n\n\nset_global_fn(100)\n\nA gear is a mechanical device that can be used to transmit rotational motion. It has a flat disk shape, with teeth on the edges and a hole in the center.\nThe hole is there to place the gear on an axle on which it can freely rotate and the teeth are there to transmit rotational motion to other gears or other mechanical components that also have teeth that are spaced the same way.\nNote that the center does not need to be circular. For example, if you wish to attach a leaver, you can use a square hole in order to transmit angular momentum from the leaver to the gear.\nOther things are possible too. For example, you might be able to connect the gear directly to a spiraling spring in order to act as an energy storage device.\nWe start by creating the base.\n\ngear_height = 5\nradius_to_teeth = 8\n\nbase_shape = cylinder(h = gear_height, r = radius_to_teeth)\nbase_shape\n\n\n\n\n\n\n\n\nNext, we need teeth. Teeth would be placed repeatedly, with spaces between them equal to the teeth width. So, once we are set to the number of teeth we want, we can compute teeth width from \\[\n\\text{teeth\\_width} \\cdot 2 \\cdot \\text{n\\_teeth} = 2 \\cdot \\pi \\cdot \\text{radius\\_to\\_teeth}\n\\]\n\nn_teeth = 10\n\nteeth_width = pi * radius_to_teeth / n_teeth\nteeth_width\n\n2.5132741228718345\n\n\n\nwith_teeth = base_shape\nfor i in range(n_teeth):\n    with_teeth += cylinder(h = gear_height, r = teeth_width/2).translate([radius_to_teeth,0,0]).rotate([0,0,360/n_teeth*i])\nwith_teeth\n\n\n\n\n\n\n\n\nWe have teeth! But they look a bit too short. To create a longer tooth, lets take a hull of two cylinders.\n\nteeth_offset = 0.25 * teeth_width\n\ntooth_end = cylinder(h = gear_height, r = teeth_width/2)\ntooth = tooth_end + tooth_end.translate([teeth_offset,0,0])\ntooth\n\n\n\n\n\n\n\n\n\ntooth = tooth.hull()\ntooth\n\n\n\n\n\n\n\n\nWe can even simplify this further since we don’t need inner side to be circular:\n\ntooth_end = cylinder(h = gear_height, r = teeth_width/2)\ntooth = (cube([teeth_width/2, teeth_width, gear_height], center=True).translate([0,0,gear_height/2])\n         + cylinder(h = gear_height, r = teeth_width/2).translate([teeth_offset,0,0]))\ntooth\n\n\n\n\n\n\n\n\nNow this geometry is simpler, so it will be faster to work with. Note that we don’t even need hull anymore.\nLets try putting this tooth into the gear:\n\nwith_teeth = base_shape\nfor i in range(n_teeth):\n    with_teeth += tooth.translate([radius_to_teeth,0,0]).rotate([0,0,360/n_teeth*i])\nwith_teeth\n\n\n\n\n\n\n\n\nLets cut out a hole for an axle:\n\naxle_radius = 2.5\n\naxle_hole = cylinder(h=gear_height*4, r=axle_radius, center=True)\ngear = with_teeth - axle_hole\ngear",
+    "crumbs": [
+      "examples",
+      "Gear"
+    ]
+  }
+]
