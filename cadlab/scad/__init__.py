@@ -126,6 +126,6 @@ def view_all(d):
 
 # %% ../../nbs/api/01_scad.ipynb 25
 def export_to_stl(model):
-    stl = export_to(d, 'stl')
+    stl = export_to(model, 'stl')
     stl = mesh.Mesh.from_file("", fh=io.BytesIO(stl))
     return stl
